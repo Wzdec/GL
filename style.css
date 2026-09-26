@@ -1,0 +1,265 @@
+/* --- VARIABLES GLOBALES Y ESTILOS BÁSICOS --- */
+:root {
+    --fondo-oscuro: #0a0a0a;
+    --color-rosa: #ff3355;
+    /* Un rojo rosado elegante */
+    --texto-principal: #ffffff;
+    --texto-secundario: #b0b0b0;
+    --transicion: all 1.5s ease-in-out;
+    /* Transición suave para el cambio de página */
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    cursor: default;
+}
+
+body,
+html {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    /* Ocultar barras de desplazamiento para una experiencia de pantalla completa */
+    background-color: var(--fondo-oscuro);
+    color: var(--texto-principal);
+}
+
+/* --- SECCIONES --- */
+section {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: var(--transicion);
+}
+
+section.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* --- ESTILOS DE PÁGINA PRINCIPAL --- */
+#pagina-principal {
+    background-color: #000000;
+}
+
+.contenido-principal {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+}
+
+.personaje-img {
+    max-height: 70vh;
+    height: auto;
+    filter: drop-shadow(0 0 30px rgba(255, 255, 255, 0.2));
+    animation: flotar-personaje 4s ease-in-out infinite;
+}
+
+@keyframes flotar-personaje {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-15px);
+    }
+}
+
+.texto-interaccion {
+    text-align: center;
+}
+
+.titulo {
+    font-size: 3rem;
+    font-weight: 300;
+    letter-spacing: 2px;
+    margin-bottom: 0.5rem;
+}
+
+.subtitulo {
+    font-size: 1.2rem;
+    color: var(--texto-secundario);
+    font-weight: 200;
+    opacity: 0.8;
+}
+
+.fas.fa-rose {
+    color: var(--color-rosa);
+    font-size: 1.5rem;
+    cursor: pointer;
+    /* Solo el icono de la rosa es clickeable */
+    transition: transform 0.3s ease;
+}
+
+.fas.fa-rose:hover {
+    transform: scale(1.2);
+    filter: drop-shadow(0 0 10px var(--color-rosa));
+}
+
+/* Fondo de estrellas sutil */
+.fondo-estrellas-suaves {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: radial-gradient(white, rgba(255, 255, 255, .2) 2px, transparent 3px);
+    background-size: 550px 550px;
+    opacity: 0.1;
+}
+
+/* --- ESTILOS DE SEGUNDA PÁGINA --- */
+#segunda-pagina {
+    /* Imagen de alta calidad de la Vía Láctea */
+    background-image: url('https://i.postimg.cc/vH1b4GZz/milky-way-star-field-ai.webp');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    /* Fija el fondo para crear el efecto de movimiento lento */
+}
+
+/* Animación sutil de la Vía Láctea al cargar */
+@keyframes zoom-lento {
+    from {
+        background-size: 100%;
+    }
+
+    to {
+        background-size: 105%;
+    }
+}
+
+#segunda-pagina.active {
+    animation: zoom-lento 60s linear infinite alternate;
+}
+
+.contenido-galaxia {
+    text-align: center;
+    position: relative;
+    z-index: 1;
+    padding: 2rem;
+}
+
+.titulo {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    text-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+}
+
+.subtitulo-largo {
+    font-size: 1.5rem;
+    color: #e0e0e0;
+    font-weight: 300;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+    text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+}
+
+.icono-corazon {
+    font-size: 2rem;
+    color: var(--color-rosa);
+    margin-bottom: 3rem;
+    filter: drop-shadow(0 0 10px var(--color-rosa));
+}
+
+/* --- Rosas 3D y Animación de Aparición --- */
+.rosa-3d {
+    position: absolute;
+    width: 150px;
+    /* Tamaño de las rosas */
+    height: auto;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 3s ease-in, visibility 3s ease-in;
+    /* Aparición gradual lenta */
+    filter: drop-shadow(0 0 15px rgba(0, 0, 0, 0.5));
+    z-index: -1;
+}
+
+/* Clase que activa la aparición */
+.rosa-3d.aparecer {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Posicionamiento específico para cada rosa (aproximado a la imagen) */
+.rosa-1 {
+    top: -10%;
+    left: 10%;
+    transform: rotate(-20deg);
+    animation: flotar-rosa 6s ease-in-out infinite;
+}
+
+.rosa-2 {
+    top: 30%;
+    right: 10%;
+    transform: rotate(15deg);
+    animation: flotar-rosa 5s ease-in-out infinite reverse;
+}
+
+.rosa-3 {
+    bottom: -10%;
+    left: 30%;
+    transform: rotate(40deg);
+    animation: flotar-rosa 7s ease-in-out infinite;
+}
+
+/* Pequeña animación de flotación para cada rosa */
+@keyframes flotar-rosa {
+
+    0%,
+    100% {
+        transform: translateY(0) rotate(var(--rotacion-base));
+    }
+
+    50% {
+        transform: translateY(-20px) rotate(var(--rotacion-base));
+    }
+}
+
+/* Aplicar rotaciones base a cada rosa individualmente para evitar sobrescrituras */
+.rosa-1 {
+    --rotacion-base: -20deg;
+}
+
+.rosa-2 {
+    --rotacion-base: 15deg;
+}
+
+.rosa-3 {
+    --rotacion-base: 40deg;
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 768px) {
+    .personaje-img {
+        max-height: 50vh;
+    }
+
+    .titulo {
+        font-size: 2.5rem;
+    }
+
+    .subtitulo,
+    .subtitulo-largo {
+        font-size: 1rem;
+    }
+
+    .rosa-3d {
+        width: 100px;
+    }
+}

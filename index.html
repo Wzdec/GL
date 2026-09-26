@@ -1,0 +1,392 @@
+```html
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Imagen con Estrellas Fugaces</title>
+
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .contenedor-escena {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* IMAGEN PRINCIPAL */
+        img.personaje {
+            max-width: 80vw;
+            max-height: 80vh;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            mix-blend-mode: screen;
+            display: block;
+            z-index: 2;
+        }
+
+        /* ZONA DE LA ROSA */
+        .zona-rosa {
+            position: absolute;
+            width: 70px;
+            height: 70px;
+            top: 54%;
+            left: 38%;
+            transform: translate(-50%, -50%);
+            cursor: pointer;
+            z-index: 10;
+            border-radius: 50%;
+        }
+
+        /* CONTENEDOR DE LA MARIPOSA */
+        .contenedor-volador {
+            position: absolute;
+            left: -180px;
+            top: 75%;
+            z-index: 20;
+            display: none;
+
+            width: 90px;
+            height: 90px;
+
+            perspective: 600px;
+        }
+
+        /*
+         * Cada ala ocupa la mitad del espacio.
+         * Las dos usan la misma imagen de la mariposa,
+         * pero se muestra solamente la mitad correspondiente.
+         */
+        .ala {
+            position: absolute;
+            top: 0;
+            width: 50%;
+            height: 100%;
+            overflow: hidden;
+
+            transform-style: preserve-3d;
+        }
+
+        .ala img {
+            position: absolute;
+            top: 0;
+
+            width: 200%;
+            height: 100%;
+
+            object-fit: contain;
+
+            filter: sepia(1) saturate(5) hue-rotate(-10deg);
+
+            display: block;
+        }
+
+        /* ALA IZQUIERDA */
+        .ala-izquierda {
+            left: 0;
+
+            transform-origin: right center;
+
+            animation: aleteoIzquierda 0.38s ease-in-out infinite;
+        }
+
+        .ala-izquierda img {
+            left: 0;
+        }
+
+        /* ALA DERECHA */
+        .ala-derecha {
+            right: 0;
+
+            transform-origin: left center;
+
+            animation: aleteoDerecha 0.38s ease-in-out infinite;
+        }
+
+        .ala-derecha img {
+            right: 0;
+        }
+
+        /*
+         * Aleteo del ala izquierda.
+         * El movimiento tiene diferentes velocidades
+         * para que no parezca mecánico.
+         */
+        @keyframes aleteoIzquierda {
+
+            0% {
+                transform: rotateY(0deg) rotateZ(0deg);
+            }
+
+            20% {
+                transform: rotateY(-25deg) rotateZ(-1deg);
+            }
+
+            45% {
+                transform: rotateY(-70deg) rotateZ(-2deg);
+            }
+
+            55% {
+                transform: rotateY(-85deg) rotateZ(-1deg);
+            }
+
+            75% {
+                transform: rotateY(-35deg) rotateZ(1deg);
+            }
+
+            100% {
+                transform: rotateY(0deg) rotateZ(0deg);
+            }
+        }
+
+        /*
+         * Aleteo del ala derecha.
+         * Tiene pequeñas diferencias respecto al ala izquierda
+         * para evitar que parezcan completamente sincronizadas.
+         */
+        @keyframes aleteoDerecha {
+
+            0% {
+                transform: rotateY(0deg) rotateZ(0deg);
+            }
+
+            20% {
+                transform: rotateY(25deg) rotateZ(1deg);
+            }
+
+            45% {
+                transform: rotateY(70deg) rotateZ(2deg);
+            }
+
+            55% {
+                transform: rotateY(85deg) rotateZ(1deg);
+            }
+
+            75% {
+                transform: rotateY(35deg) rotateZ(-1deg);
+            }
+
+            100% {
+                transform: rotateY(0deg) rotateZ(0deg);
+            }
+        }
+
+        /* TRAYECTORIA DE VUELO */
+
+        @keyframes vueloHaciaRosa {
+
+            0% {
+                left: -180px;
+                top: 75%;
+                transform: scale(0.6);
+            }
+
+            32% {
+                left: 38%;
+                top: 54%;
+                transform: scale(1);
+            }
+
+            68% {
+                left: 38%;
+                top: 54%;
+                transform: scale(1);
+            }
+
+            100% {
+                left: 110vw;
+                top: 25%;
+                transform: scale(0.8);
+            }
+        }
+
+        .animar-vuelo {
+            display: block !important;
+
+            animation:
+                vueloHaciaRosa 14s ease-in-out forwards;
+        }
+
+        /* ESTRELLAS FUGACES */
+
+        .estrella-fugaz {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+
+            background: transparent;
+
+            box-shadow:
+                0 0 0 4px rgba(255, 255, 255, 0.1);
+
+            opacity: 0;
+
+            animation:
+                animarEstrella 3s linear infinite;
+
+            z-index: 1;
+        }
+
+        .estrella-fugaz.amarilla {
+            background: #ffeb3b;
+
+            box-shadow:
+                0 0 10px 2px #ffeb3b,
+                0 0 20px 4px #ffc107;
+        }
+
+        .estrella-fugaz.azul {
+            background: #00bcd4;
+
+            box-shadow:
+                0 0 10px 2px #00bcd4,
+                0 0 20px 4px #2196f3;
+        }
+
+        .estrella-fugaz:nth-child(1) {
+            top: 10%;
+            left: 20%;
+            animation-delay: 0.2s;
+            animation-duration: 2.5s;
+        }
+
+        .estrella-fugaz:nth-child(2) {
+            top: 40%;
+            left: 10%;
+            animation-delay: 1.2s;
+            animation-duration: 3.1s;
+        }
+
+        .estrella-fugaz:nth-child(3) {
+            top: 70%;
+            left: 30%;
+            animation-delay: 0.7s;
+            animation-duration: 2.2s;
+        }
+
+        .estrella-fugaz:nth-child(4) {
+            top: 20%;
+            left: 70%;
+            animation-delay: 2.0s;
+            animation-duration: 3.5s;
+        }
+
+        .estrella-fugaz:nth-child(5) {
+            top: 80%;
+            left: 80%;
+            animation-delay: 0.5s;
+            animation-duration: 2.8s;
+        }
+
+        .estrella-fugaz:nth-child(6) {
+            top: 50%;
+            left: 90%;
+            animation-delay: 1.8s;
+            animation-duration: 3.0s;
+        }
+
+        @keyframes animarEstrella {
+
+            0% {
+                transform:
+                    rotate(315deg) translateX(0);
+
+                opacity: 1;
+            }
+
+            70% {
+                opacity: 1;
+            }
+
+            100% {
+                transform:
+                    rotate(315deg) translateX(-500px);
+
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="contenedor-escena">
+
+        <!-- ESTRELLAS -->
+        <div class="estrella-fugaz amarilla"></div>
+        <div class="estrella-fugaz azul"></div>
+        <div class="estrella-fugaz amarilla"></div>
+        <div class="estrella-fugaz azul"></div>
+        <div class="estrella-fugaz amarilla"></div>
+        <div class="estrella-fugaz azul"></div>
+
+        <!-- IMAGEN PRINCIPAL -->
+        <img src="images/img.1.png" alt="Personaje con rosa" class="personaje">
+
+        <!-- ROSA -->
+        <div class="zona-rosa" onclick="activarMagia()"></div>
+
+        <!-- MARIPOSA -->
+        <div class="contenedor-volador" id="contenedorMariposa">
+
+            <!-- ALA IZQUIERDA -->
+            <div class="ala ala-izquierda">
+                <img src="images/img.2.png" alt="Ala izquierda">
+            </div>
+
+            <!-- ALA DERECHA -->
+            <div class="ala ala-derecha">
+                <img src="images/img.2.png" alt="Ala derecha">
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <script>
+
+        function activarMagia() {
+
+            const mariposa =
+                document.getElementById('contenedorMariposa');
+
+            if (
+                mariposa.classList.contains('animar-vuelo')
+            ) {
+                return;
+            }
+
+            mariposa.classList.add('animar-vuelo');
+
+            setTimeout(() => {
+
+                window.location.href = 'carta.html';
+
+            }, 13700);
+        }
+
+    </script>
+
+</body>
+
+</html>
+```
